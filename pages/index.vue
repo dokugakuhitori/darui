@@ -48,7 +48,10 @@ import firebase from '~/plugins/firebase'
 export default {
   data () {
     return {
-      today: moment().format('ll')
+      today: moment().format('ll'),
+      daruiCount: 0,
+      tsuraiCount: 0,
+      hatarakitakunaiCount: 0
     }
   },
   methods: {
@@ -63,7 +66,10 @@ export default {
         const data = {
           content: this.text1,
           uid: this.user.uid,
-          created_at: new Date()
+          created_at: new Date(),
+          daruiCount: 0,
+          hatarakitakunaiCount: 0,
+          tsuraiCount: 0
         }
         firebase.firestore()
           .collection('posts')
@@ -172,19 +178,23 @@ export default {
       posts: 'posts/posts'
     })
   },
-  async asyncData () {
+  asyncData () {
     const createdAt = new Date()
     const year = moment(createdAt).get('year')
     const month = moment(createdAt).get('month')
     const date = moment(createdAt).get('date')
     const docId = String(year) + '-' + String(month + 1) + '-' + String(date)
-    const doc = await firebase.firestore().collection('count').doc(docId).get()
-
-    const daruiCount = doc.data().daruiCount ? doc.data().daruiCount : 0
-    const hatarakitakunaiCount = doc.data().hatarakitakunaiCount ? doc.data().hatarakitakunaiCount : 0
-    const tsuraiCount = doc.data().tsuraiCount ? doc.data().tsuraiCount : 0
-    console.log({ daruiCount, hatarakitakunaiCount, tsuraiCount })
-    return { daruiCount, hatarakitakunaiCount, tsuraiCount }
+    let daruiCount = 0
+    let hatarakitakunaiCount = 0
+    let tsuraiCount = 0
+    return firebase.firestore().collection('count').doc(docId).get()
+      .then((doc) => {
+        daruiCount = doc.data().daruiCount
+        hatarakitakunaiCount = doc.data().hatarakitakunaiCount ? doc.data().hatarakitakunaiCount : 0
+        tsuraiCount = doc.data().tsuraiCount ? doc.data().tsuraiCount : 0
+        console.log(doc.data())
+        return { daruiCount, hatarakitakunaiCount, tsuraiCount }
+      })
   }
 }
 </script>
