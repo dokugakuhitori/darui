@@ -8,7 +8,7 @@
 </template>
 
 <style>
-#app {
+/* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -17,10 +17,11 @@
   max-width: 500px;
   margin: 0 auto;
   width: 95%;
-}
+} */
 
 #nav {
   padding: 30px;
+  text-align: center;
 }
 
 #nav a {
