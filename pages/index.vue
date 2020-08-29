@@ -52,14 +52,18 @@ export default {
       today: moment().format('ll'),
       daruiCount: 0,
       tsuraiCount: 0,
-      hatarakitakunaiCount: 0
+      hatarakitakunaiCount: 0,
+      text1: '',
+      required: value => !!value || '必ず入力してください',
+      limit_length: value => (value.length <= 300 && value.length >= 10) || '10字以上300字以内で入力してください'
     }
   },
   methods: {
     ...mapActions([
       'user/signInAnonymously',
       'user/checkIsSubmit',
-      'posts/fetchPosts'
+      'posts/fetchPosts',
+      'message/setMessage'
     ]),
     submit () {
       if (this.$refs.new_form.validate()) {
@@ -106,7 +110,8 @@ export default {
             this.daruiCount = this.daruiCount + 1
           })
       } else {
-        console.log('もうむり')
+        this.$store.dispatch('snackbar/setMessage', '一日一回まで！')
+        this.$store.dispatch('snackbar/snackOn')
       }
     },
     addTsurai () {
@@ -135,7 +140,8 @@ export default {
             this.tsuraiCount = this.tsuraiCount + 1
           })
       } else {
-        console.log('mもうむり')
+        this.$store.dispatch('snackbar/setMessage', '一日一回まで！')
+        this.$store.dispatch('snackbar/snackOn')
       }
     },
     addHatarakitakunai () {
@@ -164,7 +170,8 @@ export default {
             this.hatarakitakunaiCount = this.hatarakitakunaiCount + 1
           })
       } else {
-        console.log('むりむり')
+        this.$store.dispatch('snackbar/setMessage', '一日一回まで！')
+        this.$store.dispatch('snackbar/snackOn')
       }
     }
   },
@@ -245,6 +252,9 @@ export default {
   text-align: left !important;
   word-break: break-all !important;
   white-space: normal !important;
+  color: black !important;
+  font-size: 1rem !important;
+  font-weight: bold !important;
 }
 
 .btn-wrapper {
