@@ -4,9 +4,9 @@ import moment from 'moment'
 export const state = () => ({
   user: { uid: '' },
   isLogin: false,
-  isDarui: false,
-  isTsurai: false,
-  isHatarakitakunai: false
+  isDarui: true,
+  isTsurai: true,
+  isHatarakitakunai: true
 })
 
 export const mutations = {
@@ -59,18 +59,18 @@ export const actions = {
       })
   },
   checkIsSubmit (context) {
-    const createdAt = new Date()
-    const year = moment(createdAt).get('year')
-    const month = moment(createdAt).get('month')
-    const date = moment(createdAt).get('date')
-    const docId = String(year) + '-' + String(month + 1) + '-' + String(date)
+    const createdAt2 = moment().tz('Asia/Tokyo').format('l').split('/')
+    const year = createdAt2[0]
+    const month = createdAt2[1]
+    const date = createdAt2[2]
+    const docId = String(year) + '-' + String(month) + '-' + String(date)
     firebase.firestore().collection('count').doc(docId).collection('darui')
       .where('uid', '==', context.state.user.uid)
       .limit(1)
       .get()
       .then((querySnapShot) => {
-        if (querySnapShot.docs.length !== 0) {
-          context.commit('setDarui', true)
+        if (querySnapShot.docs.length === 0) {
+          context.commit('setDarui', false)
         }
       })
       .catch((error) => {
@@ -81,8 +81,8 @@ export const actions = {
       .limit(1)
       .get()
       .then((querySnapShot) => {
-        if (querySnapShot.docs.length !== 0) {
-          context.commit('setTsurai', true)
+        if (querySnapShot.docs.length === 0) {
+          context.commit('setTsurai', false)
         }
       })
       .catch((error) => {
@@ -93,8 +93,8 @@ export const actions = {
       .limit(1)
       .get()
       .then((querySnapShot) => {
-        if (querySnapShot.docs.length !== 0) {
-          context.commit('setHatarakitakunai', true)
+        if (querySnapShot.docs.length === 0) {
+          context.commit('setHatarakitakunai', false)
         }
       })
       .catch((error) => {

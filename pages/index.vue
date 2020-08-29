@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="container">
   <div class="btn-wrapper">
     <button v-on:click="addDarui" class="btn-1">だるい</button>
     <button v-on:click="addTsurai" class="btn-1">つらい</button>
@@ -24,11 +24,12 @@
     <v-list color="#f1eddd" class="postlist">
         <template v-for="(post, index) in posts">
           <v-list-item :key="post.content">
-              <v-list-item-content class="li-content">
-                {{ post.content }}
+              <v-list-item-content >
+                <v-list-item-subtitle class="li-content">
+                  {{ post.content }}
+                </v-list-item-subtitle>
               </v-list-item-content>
           </v-list-item>
-
           <v-divider
             :key="index"
           ></v-divider>
@@ -41,7 +42,7 @@
 
 <script>
 import 'moment/locale/ja'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { mapActions, mapGetters } from 'vuex'
 import firebase from '~/plugins/firebase'
 
@@ -83,10 +84,11 @@ export default {
       if (!this.isDarui) {
         const batch = firebase.firestore().batch()
         const createdAt = new Date()
-        const year = moment(createdAt).get('year')
-        const month = moment(createdAt).get('month')
-        const date = moment(createdAt).get('date')
-        const docId = String(year) + '-' + String(month + 1) + '-' + String(date)
+        const createdAt2 = moment().tz('Asia/Tokyo').format('l').split('/')
+        const year = createdAt2[0]
+        const month = createdAt2[1]
+        const date = createdAt2[2]
+        const docId = String(year) + '-' + String(month) + '-' + String(date)
         const postRef = firebase.firestore().collection('count').doc(docId)
         const data = {
           uid: this.user.uid,
@@ -111,10 +113,11 @@ export default {
       if (!this.isTsurai) {
         const batch = firebase.firestore().batch()
         const createdAt = new Date()
-        const year = moment(createdAt).get('year')
-        const month = moment(createdAt).get('month')
-        const date = moment(createdAt).get('date')
-        const docId = String(year) + '-' + String(month + 1) + '-' + String(date)
+        const createdAt2 = moment().tz('Asia/Tokyo').format('l').split('/')
+        const year = createdAt2[0]
+        const month = createdAt2[1]
+        const date = createdAt2[2]
+        const docId = String(year) + '-' + String(month) + '-' + String(date)
         const postRef = firebase.firestore().collection('count').doc(docId)
         const data = {
           uid: this.user.uid,
@@ -139,10 +142,11 @@ export default {
       if (!this.isHatarakitakunai) {
         const batch = firebase.firestore().batch()
         const createdAt = new Date()
-        const year = moment(createdAt).get('year')
-        const month = moment(createdAt).get('month')
-        const date = moment(createdAt).get('date')
-        const docId = String(year) + '-' + String(month + 1) + '-' + String(date)
+        const createdAt2 = moment().tz('Asia/Tokyo').format('l').split('/')
+        const year = createdAt2[0]
+        const month = createdAt2[1]
+        const date = createdAt2[2]
+        const docId = String(year) + '-' + String(month) + '-' + String(date)
         const postRef = firebase.firestore().collection('count').doc(docId)
         const data = {
           uid: this.user.uid,
@@ -179,19 +183,22 @@ export default {
     })
   },
   asyncData () {
-    const createdAt = new Date()
-    const year = moment(createdAt).get('year')
-    const month = moment(createdAt).get('month')
-    const date = moment(createdAt).get('date')
-    const docId = String(year) + '-' + String(month + 1) + '-' + String(date)
+    const createdAt = moment().tz('Asia/Tokyo').format('l').split('/')
+    const year = createdAt[0]
+    const month = createdAt[1]
+    const date = createdAt[2]
+    const docId = String(year) + '-' + String(month) + '-' + String(date)
+    console.log(docId)
     let daruiCount = 0
     let hatarakitakunaiCount = 0
     let tsuraiCount = 0
     return firebase.firestore().collection('count').doc(docId).get()
       .then((doc) => {
-        daruiCount = doc.data().daruiCount
-        hatarakitakunaiCount = doc.data().hatarakitakunaiCount ? doc.data().hatarakitakunaiCount : 0
-        tsuraiCount = doc.data().tsuraiCount ? doc.data().tsuraiCount : 0
+        if (doc.exists) {
+          daruiCount = doc.data().daruiCount ? doc.data().daruiCount : 0
+          hatarakitakunaiCount = doc.data().hatarakitakunaiCount ? doc.data().hatarakitakunaiCount : 0
+          tsuraiCount = doc.data().tsuraiCount ? doc.data().tsuraiCount : 0
+        }
         console.log(doc.data())
         return { daruiCount, hatarakitakunaiCount, tsuraiCount }
       })
@@ -199,7 +206,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .container {
   margin: 0;
   min-height: 100vh;
@@ -235,7 +242,9 @@ export default {
 }
 
 .li-content {
-  text-align: left;
+  text-align: left !important;
+  word-break: break-all !important;
+  white-space: normal !important;
 }
 
 .btn-wrapper {
@@ -265,11 +274,10 @@ h3 {
   background-color: rgba(255, 0, 0, 0.973);
   padding: 10px;
   font-weight: bold;
-}
-
-.btn-1:hover {
-  margin-top: 3px;
-  border-bottom: 2px solid #9f000c;
+  &:hover {
+    margin-top: 3px;
+    border-bottom: 2px solid #9f000c;
+  }
 }
 
 .kokuban {
@@ -290,4 +298,8 @@ h3 {
     border: 3px solid #ffb1b3;
 }
 
+.container {
+  max-width: 500px;
+  margin: auto;
+}
 </style>
