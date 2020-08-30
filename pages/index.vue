@@ -10,7 +10,7 @@
     <h3>だるい: {{ daruiCount }}人 つらい: {{ tsuraiCount }}人</h3>
     <h3>働きたくない: {{ hatarakitakunaiCount }}人</h3>
   </div>
-  <v-form ref="new_form" class="ans_form">
+  <v-form ref="new_form" class="ans_form" @submit.prevent>
     <v-text-field
       v-model="text1"
       counter
@@ -55,7 +55,7 @@ export default {
       hatarakitakunaiCount: 0,
       text1: '',
       required: value => !!value || '必ず入力してください',
-      limit_length: value => (value.length <= 300 && value.length >= 10) || '10字以上300字以内で入力してください'
+      limit_length: value => ((value || '').length <= 50 && (value || '').length >= 10) || '10字以上50字以内で入力してください'
     }
   },
   methods: {
@@ -67,19 +67,18 @@ export default {
     ]),
     submit () {
       if (this.$refs.new_form.validate()) {
-        // const batch = firebase.firestore().batch()
         const data = {
           content: this.text1,
           uid: this.user.uid,
-          created_at: new Date(),
-          daruiCount: 0,
-          hatarakitakunaiCount: 0,
-          tsuraiCount: 0
+          created_at: new Date()
         }
         firebase.firestore()
           .collection('posts')
           .add(data)
           .then(() => {
+            this.$store.commit('posts/addPost', data)
+            this.$store.dispatch('snackbar/setMessage', '送信しました')
+            this.$store.dispatch('snackbar/snackOn')
             this.$refs.new_form.reset()
           })
       }
@@ -195,7 +194,6 @@ export default {
     const month = createdAt[1]
     const date = createdAt[2]
     const docId = String(year) + '-' + String(month) + '-' + String(date)
-    console.log(docId)
     let daruiCount = 0
     let hatarakitakunaiCount = 0
     let tsuraiCount = 0
@@ -206,7 +204,6 @@ export default {
           hatarakitakunaiCount = doc.data().hatarakitakunaiCount ? doc.data().hatarakitakunaiCount : 0
           tsuraiCount = doc.data().tsuraiCount ? doc.data().tsuraiCount : 0
         }
-        console.log(doc.data())
         return { daruiCount, hatarakitakunaiCount, tsuraiCount }
       })
   }

@@ -7,6 +7,9 @@ export const state = () => ({
 export const mutations = {
   setPosts (state, posts) {
     state.posts = posts
+  },
+  addPost (state, post) {
+    state.posts.unshift(post)
   }
 }
 

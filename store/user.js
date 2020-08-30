@@ -73,9 +73,6 @@ export const actions = {
           context.commit('setDarui', false)
         }
       })
-      .catch((error) => {
-        console.log(error)
-      })
     firebase.firestore().collection('count').doc(docId).collection('tsurai')
       .where('uid', '==', context.state.user.uid)
       .limit(1)
@@ -85,9 +82,6 @@ export const actions = {
           context.commit('setTsurai', false)
         }
       })
-      .catch((error) => {
-        console.log(error)
-      })
     firebase.firestore().collection('count').doc(docId).collection('hatarakitakunai')
       .where('uid', '==', context.state.user.uid)
       .limit(1)
@@ -96,9 +90,6 @@ export const actions = {
         if (querySnapShot.docs.length === 0) {
           context.commit('setHatarakitakunai', false)
         }
-      })
-      .catch((error) => {
-        console.log(error)
       })
   }
 }

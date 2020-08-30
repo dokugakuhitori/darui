@@ -8,12 +8,10 @@
     >
       {{ this.$store.getters['snackbar/message'] }}
     </v-snackbar>
-    <v-content fluid>
+    <v-main class="ma-2" fluid>
       <navbar />
-      <v-container fluid>
       <nuxt />
-      </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
