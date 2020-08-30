@@ -194,12 +194,14 @@ export default {
     const month = createdAt[1]
     const date = createdAt[2]
     const docId = String(year) + '-' + String(month) + '-' + String(date)
+    console.log(docId)
     let daruiCount = 0
     let hatarakitakunaiCount = 0
     let tsuraiCount = 0
     return firebase.firestore().collection('count').doc(docId).get()
       .then((doc) => {
         if (doc.exists) {
+          console.log(doc.data())
           daruiCount = doc.data().daruiCount ? doc.data().daruiCount : 0
           hatarakitakunaiCount = doc.data().hatarakitakunaiCount ? doc.data().hatarakitakunaiCount : 0
           tsuraiCount = doc.data().tsuraiCount ? doc.data().tsuraiCount : 0
