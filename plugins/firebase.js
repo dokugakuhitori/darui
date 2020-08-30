@@ -1,14 +1,14 @@
 import firebase from 'firebase'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyC5l6IxfejIvBUdiYvxJarH6fW8WxJBl6g',
-  authDomain: 'darui-tsurai.firebaseapp.com',
-  databaseURL: 'https://darui-tsurai.firebaseio.com',
-  projectId: 'darui-tsurai',
-  storageBucket: 'darui-tsurai.appspot.com',
-  messagingSenderId: '882742868111',
-  appId: '1:882742868111:web:dd9c865d030a83cbf398fa',
-  measurementId: 'G-PSWVGSJ5BY'
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  databaseURL: process.env.DATABASE_URL,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSEAGING_SENDERID,
+  appId: process.env.APPID,
+  measurementId: process.env.MEASUREMENTID
 }
 
 if (!firebase.apps.length) {
