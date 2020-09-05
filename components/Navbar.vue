@@ -7,18 +7,11 @@
   </div>
 </template>
 
-<style>
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  max-width: 500px;
-  margin: 0 auto;
-  width: 95%;
-} */
-
+<style scoped>
+h1 {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 900;
+}
 #nav {
   padding: 30px;
   text-align: center;

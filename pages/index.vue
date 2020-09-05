@@ -11,23 +11,29 @@
     <h3>働きたくない: {{ hatarakitakunaiCount }}人</h3>
   </div>
   <v-form ref="new_form" class="ans_form" @submit.prevent>
-    <v-text-field
+    <v-textarea
+      name="input-7-1"
+      label="お疲れさまです...何かあれば..."
+      v-model="text1"
+      :rules="[required, limit_length]"
+    ></v-textarea>
+    <!-- <v-text-field
       v-model="text1"
       counter
       label="吐き出しましょう。"
       :rules="[required, limit_length]"
     >
-    </v-text-field>
-    <button v-on:click="submit" class="send-btn"><v-icon>mdi-send</v-icon></button>
+    </v-text-field> -->
+    <button v-on:click="submit" class="btn-1" style="width: 90%;">投稿する</button>
   </v-form>
   <div>
     <v-list color="#f1eddd" class="postlist">
         <template v-for="(post, index) in posts">
           <v-list-item :key="post.content">
               <v-list-item-content >
-                <v-list-item-subtitle class="li-content">
+                <p class="li-content">
                   {{ post.content }}
-                </v-list-item-subtitle>
+                </p>
               </v-list-item-content>
           </v-list-item>
           <v-divider
@@ -238,8 +244,8 @@ export default {
 }
 
 .ans_form {
-  display: flex;
-  align-items: center;
+  // display: flex;
+  // align-items: center;
   margin-top: 1.5rem;
   margin-left: 1rem;
 }
@@ -249,11 +255,12 @@ export default {
 
 .li-content {
   text-align: left !important;
-  word-break: break-all !important;
-  white-space: normal !important;
+  white-space: pre-line !important;
+  word-wrap: break-word !important;
   color: black !important;
   font-size: 1rem !important;
   font-weight: bold !important;
+  margin: 0px !important;
 }
 
 .btn-wrapper {
