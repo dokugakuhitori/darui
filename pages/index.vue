@@ -255,6 +255,7 @@ export default {
 
 .li-content {
   text-align: left !important;
+  line-height: normal !important;
   white-space: pre-line !important;
   word-wrap: break-word !important;
   color: black !important;
